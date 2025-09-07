@@ -1,9 +1,12 @@
 import pandas as pd 
 import matplotlib.pyplot as plt
 import scipy.stats as st
+import numpy as np
 
 ds1 = pd.read_csv("dataset1.csv")
 ds2 = pd.read_csv("dataset2.csv")
+
+
 
 # Create series for each group of rat_arrival_number (1, 2, 3, 4+)
 
@@ -24,6 +27,22 @@ rat_mean = pd.Series({
 # print(rat_mean)
 
 
+x = np.array([1, 2, 3, 4])
+y = rat_mean.values
+
+m, b = np.polyfit(x, y, 1)
+plt.plot(x, m*x + b, color='red', label='Best Fit Line')
+
+plt.scatter(x, y, edgecolor='black')
+plt.title("Average Bat Landing Number by Rat Arrival Number")
+plt.xlabel("Rat Arrival Number")
+plt.ylabel("Average Bat Landing Number")
+plt.ylim(0, 30)  # Set y-axis to show 0 to 30
+plt.show()
+
+
+
+# ignore the following statistical tests for now
 
 # Rat 1 tests
 x_bar_r1 = rat1.mean()
@@ -47,13 +66,5 @@ n_r4 = len(rat4plus)
 
 
 
-p_val = st.ttest_ind_from_stats(x_bar_r1, s_r1, n_r1, x_bar_r2, s_r2, n_r2)
-print("P-value for rat 1 vs rat 2:", p_val.pvalue)
-
-
-
-# plt.bar(rat_mean.index, rat_mean.values, edgecolor='black')
-# plt.title("Average Bat Landing Number by Rat Arrival Number")
-# plt.xlabel("Rat Arrival Number")
-# plt.ylabel("Average Bat Landing Number")
-# plt.show()
+# p_val = st.ttest_ind_from_stats(x_bar_r1, s_r1, n_r1, x_bar_r2, s_r2, n_r2)
+# print("P-value for rat 1 vs rat 2:", p_val.pvalue)
