@@ -18,6 +18,10 @@ habit_map = {
     'bat_fight': 1,
     'attack_rat': 1,
     'rat_fight': 1,
+    'rat_attack': 1,
+    'fight_rat' :1,
+    
+    'rat': 2,
     'fast': 2,
     'gaze': 2,
     'other_bats': 2
@@ -26,31 +30,16 @@ habit_map = {
 ds1['habit_value'] = ds1['habit'].map(habit_map)
 
 
-# habitConflict = ds1[ds1['habit'].isin(['bat_fight', 'attack_rat', 'rat_fight'])]['bat_landing_to_food']
-# habitPeace = ds1[ds1['habit'].isin(['fast', 'gaze', 'other_bats'])]['bat_landing_to_food']
+conflict = ds1[ds1['habit_value']==1]
+no_conflict = ds1[ds1['habit_value']==2]
 
-# habitConflictAvg = habitConflict.mean()
-# habitPeaceAvg = habitPeace.mean()
+conflictHesitancy = conflict['bat_landing_to_food']
+noConflictHesitancy = no_conflict['bat_landing_to_food']
 
-# print(habitConflictAvg, habitPeaceAvg)
+print(conflictHesitancy.mean(), conflictHesitancy.std())
+print(noConflictHesitancy.mean(), noConflictHesitancy.std())    
 
-# plt.bar(['Conflict Habits', 'Peaceful Habits'], [habitConflictAvg, habitPeaceAvg], color=['red', 'green'])
-# plt.ylabel('Average Bats')
-# plt.xlabel('Habit Type')
-
-x = ds1['habit_value']
-y = ds1['bat_landing_to_food']
-
-ymean = y.mean()
-xmean = x.mean()
-
-# m, b = np.polyfit(x, y, 1)
-# plt.plot(x, m*x + b, color='red', label='Best Fit Line')
-
-print('Y-Mean',ymean, 'X-Mean', xmean)
-
-plt.scatter(x, y)
-plt.xlabel('Habit Value (1 = Conflict, 2 = Peaceful)')
-plt.ylabel('Bat Landing to Food')
-
+plt.bar(['Conflict Behavior', 'No Conflict Behavior'], [conflictHesitancy.mean(), noConflictHesitancy.mean()])
+plt.ylabel('Hesitancy (seconds)')
+plt.title('Bat Hesitancy After Landing Based on Conflict Behavior')
 plt.show()
