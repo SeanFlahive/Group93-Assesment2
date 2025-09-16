@@ -20,8 +20,8 @@ stdRat = food['rat_arrival_number'].std()
 fFood = fFood[fFood['rat_arrival_number'].between(meanRat - 2*stdRat, meanRat + 2*stdRat)]
 
 
-x = food['rat_arrival_number']
-y = food['bat_landing_number']
+x = food['bat_landing_number']
+y = food['food_availability']
 
 m, b = np.polyfit(x, y, 1)
 plt.plot(x, m*x + b, color='red', label='Best Fit Line')

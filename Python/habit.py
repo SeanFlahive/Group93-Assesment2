@@ -4,42 +4,17 @@ import scipy.stats as st
 import numpy as np
 
 
-ds1 = pd.read_csv("dataset1.csv")
+df = pd.read_csv("dataset1.csv")
 
+mean = df['bat_landing_to_food'].mean()
+std = df['bat_landing_to_food'].std()
+df = df[df['bat_landing_to_food'].between(mean - 2*std, mean + 2*std)]
 
+mean_hesitancy = df.groupby('habit')['bat_landing_to_food'].mean()
 
-# fight 
-# both no fight
-# just bats 
+sorted_habits = mean_hesitancy.sort_values()
 
-# risk 
-
-habit_map = {
-    'bat_fight': 1,
-    'attack_rat': 1,
-    'rat_fight': 1,
-    'rat_attack': 1,
-    'fight_rat' :1,
-    
-    'rat': 2,
-    'fast': 2,
-    'gaze': 2,
-    'other_bats': 2
-}
-
-ds1['habit_value'] = ds1['habit'].map(habit_map)
-
-
-conflict = ds1[ds1['habit_value']==1]
-no_conflict = ds1[ds1['habit_value']==2]
-
-conflictHesitancy = conflict['bat_landing_to_food']
-noConflictHesitancy = no_conflict['bat_landing_to_food']
-
-print(conflictHesitancy.mean(), conflictHesitancy.std())
-print(noConflictHesitancy.mean(), noConflictHesitancy.std())    
-
-plt.bar(['Conflict Behavior', 'No Conflict Behavior'], [conflictHesitancy.mean(), noConflictHesitancy.mean()])
-plt.ylabel('Hesitancy (seconds)')
-plt.title('Bat Hesitancy After Landing Based on Conflict Behavior')
+plt.bar(range(len(sorted_habits)), sorted_habits.values)
+plt.xlabel('Habit (index)')
+plt.ylabel('Mean Bat Landing to Food Time (seconds)')
 plt.show()
